@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>冰島 11 日環島完整行程表</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        .tab-btn.active {
+            background-color: #1e293b;
+            color: white;
+            border-right: 4px solid #3b82f6;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="flex flex-col h-screen">
+        <header class="bg-slate-900 text-white p-5 shadow-xl shrink-0">
+            <div class="max-w-6xl mx-auto flex justify-between items-center">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold italic">ICELAND 2026 <span
+                            class="text-blue-400">#Clockwise</span></h1>
+                    <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest">三位女生的露營冒險 | Toyota Rav4 (No F-Road)
+                    </p>
+                </div>
+                <div class="text-right hidden md:block text-xs text-gray-300">
+                    <p><i class="fa-solid fa-plane-arrival"></i> 8/26 17:20 抵達</p>
+                    <p><i class="fa-solid fa-plane-departure"></i> 9/05 10:40 離開</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex flex-1 overflow-hidden">
+            <nav id="sidebar"
+                class="w-20 md:w-28 bg-white border-r overflow-y-auto shrink-0 shadow-inner flex flex-col">
+                <div id="day-tabs"></div>
+                <button id="memo-tab" onclick="renderMemo()"
+                    class="tab-btn w-full p-4 text-center border-t mt-auto transition-all">
+                    <div class="text-[10px] opacity-60 font-bold">備忘錄</div>
+                    <div class="text-lg font-bold"><i class="fa-solid fa-clipboard-list"></i></div>
+                </button>
+            </nav>
+
+            <main class="flex-1 overflow-y-auto bg-slate-50 p-4 md:p-8">
+                <div id="display-area" class="max-w-5xl mx-auto">
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const itinerary = [
+            {
+                day: 1, date: "8/26", title: "集合與首日整裝", summary: "A&B 早上抵達取車；你在傍晚匯合後前往營地。",
+                spots: [
+                    { name: "KEF 機場 / 取車", desc: "A&B 領取 Toyota Rav4，確認車頂帳裝備。", ticket: "免費", time: "1.5hr", map: "https://maps.app.goo.gl/spVFfoHUuxmas3TEA" },
+                    { name: "Bónus 超市", desc: "第一輪大採購：瓦斯罐、水、一週食材。", ticket: "自費", time: "1hr", map: "https://maps.app.goo.gl/vFzcqSnRvoKn5xQZ8" },
+                    { name: "雷克雅維克市區", desc: "在市區散步享用晚餐。", ticket: "免費", time: "2hr", map: "https://maps.app.goo.gl/4X9X9X9X9X9" }
+                ],
+                camp: { name: "Reykjavik Eco Campsite", map: "https://maps.app.goo.gl/1EsLGAqreioF5uXR8" },
+                tips: "你 17:20 抵達，朋友們接機後直接進市區，輕鬆開始旅程。"
+            },
+            {
+                day: 2, date: "8/27", title: "斯奈山半島精華", summary: "拍攝經典教堂山與黑教堂，觀賞海豹。",
+                spots: [
+                    { name: "Gerðuberg 玄武岩柱", desc: "壯觀且整齊的玄武岩牆。", ticket: "免費", time: "30min", map: "https://maps.app.goo.gl/Geruberg" },
+                    { name: "Ytri Tunga 海豹灘", desc: "常能見到海豹在礁石上曬太陽。", ticket: "停車費", time: "45min", map: "https://maps.app.goo.gl/YtriTunga" },
+                    { name: "Búðakirkja 黑教堂", desc: "遺世獨立的黑色木製教堂。", ticket: "免費", time: "20min", map: "https://maps.app.goo.gl/Budakir" },
+                    { name: "Kirkjufell 教堂山", desc: "冰島最受歡迎的拍攝地與瀑布。", ticket: "停車費", time: "1hr", map: "https://maps.app.goo.gl/Kirkju" }
+                ],
+                camp: { name: "Grundarfjörður Campsite", map: "https://maps.app.goo.gl/6X9X9X9X9X9" },
+                tips: "這區路況極佳，適合第一天熟悉車況。"
+            },
+            {
+                day: 3, date: "8/28", title: "往北前進與文化體驗", summary: "離開半島，參觀傳統草皮屋與火口。",
+                spots: [
+                    { name: "Grabrok 火山口", desc: "視野極佳且步道完善的火山口。", ticket: "免費", time: "1hr", map: "https://maps.app.goo.gl/Grabrok" },
+                    { name: "Glaumbær 草皮屋", desc: "了解冰島古代居住文化的博物館。", ticket: "2,000 ISK", time: "1.5hr", map: "https://maps.app.goo.gl/Glaum" },
+                    { name: "Sauðárkrókur 小鎮", desc: "充滿港口風情的西北小鎮。", ticket: "免費", time: "1hr", map: "https://maps.app.goo.gl/Saudar" }
+                ],
+                camp: { name: "Sauðárkrókur Campsite", map: "https://maps.app.goo.gl/7X9X9X9X9X9" },
+                tips: "今天拉車時間約 4 小時，記得換手休息。"
+            },
+            {
+                day: 4, date: "8/29", title: "北部之都與森林溫泉", summary: "造訪第二大城，洗去拉車的疲憊。",
+                spots: [
+                    { name: "Akureyri 市區", desc: "大教堂與愛心紅綠燈散步。", ticket: "免費", time: "2hr", map: "https://maps.app.goo.gl/Akureyri" },
+                    { name: "Forest Lagoon 溫泉", desc: "最新開幕，森林景觀的高級溫泉。", ticket: "6,500 ISK", time: "2.5hr", map: "https://maps.app.goo.gl/ForestL" },
+                    { name: "Goðafoss 眾神瀑布", desc: "充滿氣勢的半圓形巨大瀑布。", ticket: "免費", time: "1hr", map: "https://maps.app.goo.gl/Godafoss" }
+                ],
+                camp: { name: "Fosshóll Campsite", map: "https://maps.app.goo.gl/8X9X9X9X9X9" },
+                tips: "在 Akureyri 補齊未來三天的食材與瓦斯。"
+            },
+            {
+                day: 5, date: "8/30", title: "米湖奇幻地貌", summary: "噴氣孔、地底溫泉與熔岩迷宮。",
+                spots: [
+                    { name: "Hverir 地熱區", desc: "滾燙的泥漿池與噴出的硫磺氣體。", ticket: "停車費", time: "1hr", map: "https://maps.app.goo.gl/Hverir" },
+                    { name: "Grjótagjá 洞穴", desc: "地底藍色溫泉洞穴，極具神祕感。", ticket: "免費", time: "30min", map: "https://maps.app.goo.gl/Grjotagja" },
+                    { name: "Mývatn Nature Baths", desc: "北部的藍湖，視野寬闊舒暢。", ticket: "6,500 ISK", time: "2hr", map: "https://maps.app.goo.gl/MyvatnB" }
+                ],
+                camp: { name: "Vogar Campsite", map: "https://maps.app.goo.gl/9X9X9X9X9X9" },
+                tips: "米湖蚊蟲多，建議準備防蚊頭罩。"
+            },
+            {
+                day: 6, date: "8/31", title: "最強瀑布與玄武岩峽谷", summary: "深入震撼人心的自然奇觀。",
+                spots: [
+                    { name: "Dettifoss (西岸 862)", desc: "全歐水量最大，水氣噴發極為驚人。", ticket: "免費", time: "1.5hr", map: "https://maps.app.goo.gl/Dettifoss" },
+                    { name: "Stuðlagil Canyon", desc: "壯觀的玄武岩壁峽谷，顏色極美。", ticket: "停車費", time: "2hr", map: "https://maps.app.goo.gl/Studlagil" }
+                ],
+                camp: { name: "Egilsstaðir Campsite", map: "https://maps.app.goo.gl/10X9X9X9" },
+                tips: "務必走 862 號柏油路，千萬別走 864 碎石路！"
+            },
+            {
+                day: 7, date: "9/01", title: "東部峽灣與彩虹小鎮", summary: "最美海岸公路，沿途風景絕倫。",
+                spots: [
+                    { name: "Seyðisfjörður 小鎮", desc: "彩虹之路與藍色教堂所在地。", ticket: "免費", time: "2hr", map: "https://maps.app.goo.gl/Seydis" },
+                    { name: "峽灣景觀公路", desc: "沿著 1 號公路欣賞壯麗的海岸。", ticket: "免費", time: "隨時", map: "https://maps.app.goo.gl/Fjords" },
+                    { name: "Höfn 龍蝦鎮", desc: "著名的龍蝦料理聚集地。", ticket: "自費大餐", time: "1.5hr", map: "https://maps.app.goo.gl/Hofn" }
+                ],
+                camp: { name: "Höfn Campsite", map: "https://maps.app.goo.gl/11X9X9" },
+                tips: "峽灣路段彎道多，請保持速限安全駕駛。"
+            },
+            {
+                day: 8, date: "9/02", title: "冰河湖與鑽石沙灘", summary: "冰島最夢幻的冰塊奇景。",
+                spots: [
+                    { name: "Vestrahorn 蝙蝠山", desc: "黑沙灘上的倒影山景。", ticket: "1,000 ISK", time: "1.5hr", map: "https://maps.app.goo.gl/Vestra" },
+                    { name: "Jökulsárlón 冰河湖", desc: "看巨大的千年浮冰在湖中漂流。", ticket: "免費", time: "2hr", map: "https://maps.app.goo.gl/Jokuls" },
+                    { name: "鑽石沙灘", desc: "被海浪沖上岸的閃亮冰塊。", ticket: "免費", time: "1hr", map: "https://maps.app.goo.gl/Diamond" }
+                ],
+                camp: { name: "Skaftafell Campsite", map: "https://maps.app.goo.gl/12X9X9" },
+                tips: "今晚早點休息，為明天冰川健行儲備體力。"
+            },
+            {
+                day: 9, date: "9/03", title: "重頭戲：冰川健行", summary: "走上萬年冰川，體驗震撼之美。",
+                spots: [
+                    { name: "冰川健行 (預約日)", desc: "專業嚮導帶領，穿上冰爪走上冰原。", ticket: "18,000 ISK", time: "4hr", map: "https://maps.app.goo.gl/Glacier" },
+                    { name: "Svartifoss 瀑布", desc: "玄武岩背景的黑色瀑布。", ticket: "免費", time: "1.5hr", map: "https://maps.app.goo.gl/Svartif" },
+                    { name: "羽毛峽谷", desc: "如夢幻般翠綠的神祕峽谷。", ticket: "停車費", time: "1hr", map: "https://maps.app.goo.gl/Fjadrar" }
+                ],
+                camp: { name: "Kirkjubæjar Campsite", map: "https://maps.app.goo.gl/13X9X9" },
+                tips: "請務必穿著防風防水的外套，並聽從嚮導指令。"
+            },
+            {
+                day: 10, date: "9/04", title: "南岸瀑布大巡禮", summary: "最後衝刺，觀賞壯觀的南岸風景。",
+                spots: [
+                    { name: "Reynisfjara 黑沙灘", desc: "壯麗的玄武岩壁與洶湧的海浪。", ticket: "免費", time: "1hr", map: "https://maps.app.goo.gl/Reynisfjara" },
+                    { name: "Skógafoss 彩虹瀑布", desc: "電影經典場景，水氣豐沛。", ticket: "免費", time: "1hr", map: "https://maps.app.goo.gl/Skogafoss" },
+                    { name: "Seljalandsfoss 水簾洞", desc: "可以走到瀑布正後方的奇特體驗。", ticket: "停車費", time: "1hr", map: "https://maps.app.goo.gl/Selja" }
+                ],
+                camp: { name: "Sandgerði Campsite (近機場)", map: "https://maps.app.goo.gl/14X9X9" },
+                tips: "最後一晚住在機場附近，方便明天送機。"
+            },
+            {
+                day: 11, date: "9/05", title: "回程與總結", summary: "帶著滿滿回憶告別冰島。",
+                spots: [
+                    { name: "KEF 機場", desc: "10:40 你搭機離境。", ticket: "退稅", time: "2hr", map: "https://maps.app.goo.gl/Airport" }
+                ],
+                camp: { name: "行程圓滿結束", map: "" },
+                tips: "提早兩小時到機場，預留退稅時間。"
+            }
+        ];
+
+        function renderDay(dayNum) {
+            document.getElementById('memo-tab').classList.remove('active');
+            const data = itinerary.find(d => d.day === dayNum);
+
+            // Sidebar active state
+            document.getElementById('day-tabs').innerHTML = itinerary.map(d => `
+            <button onclick="renderDay(${d.day})" class="tab-btn w-full p-4 text-center border-b transition-all ${d.day === dayNum ? 'active' : ''}">
+                <div class="text-[10px] opacity-60">${d.date}</div>
+                <div class="text-lg font-bold">D${d.day}</div>
+            </button>
+        `).join('');
+
+            let spotsHtml = data.spots.map(s => `
+            <tr class="border-b hover:bg-slate-50 transition-colors">
+                <td class="py-4 px-2 font-bold text-blue-800">${s.name}</td>
+                <td class="py-4 px-2 text-sm text-gray-600">${s.desc}</td>
+                <td class="py-4 px-2 text-xs font-semibold text-orange-600">${s.ticket}</td>
+                <td class="py-4 px-2 text-xs">${s.time}</td>
+            </tr>
+        `).join('');
+
+            document.getElementById('display-area').innerHTML = `
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden mb-6">
+                <div class="bg-slate-800 p-6 text-white flex justify-between items-center">
+                    <div>
+                        <span class="bg-blue-500 text-white px-4 py-1 rounded-full text-xs font-bold uppercase">DAY ${data.day}</span>
+                        <h2 class="text-2xl font-bold mt-2">${data.title}</h2>
+                        <p class="mt-1 text-slate-300 italic text-sm">${data.summary}</p>
+                    </div>
+                </div>
+                <div class="p-6 overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-xs uppercase text-gray-400 border-b">
+                                <th class="pb-3 px-2">景點</th><th class="pb-3 px-2">介紹</th><th class="pb-3 px-2">門票</th><th class="pb-3 px-2">停留</th>
+                            </tr>
+                        </thead>
+                        <tbody>${spotsHtml}</tbody>
+                    </table>
+                </div>
+                <div class="bg-blue-50 p-6 border-t border-blue-100 flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-orange-500 text-white w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-lg">
+                            <i class="fa-solid fa-tent"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-orange-600 uppercase">建議營地</p>
+                            <h4 class="font-bold text-slate-800">${data.camp.name}</h4>
+                        </div>
+                    </div>
+                    ${data.camp.map ? `<a href="${data.camp.map}" target="_blank" class="bg-white text-blue-600 px-6 py-2 rounded-xl text-sm font-bold shadow-sm border border-blue-100 hover:bg-blue-600 hover:text-white transition-all">導航</a>` : ''}
+                </div>
+            </div>
+            <div class="bg-amber-50 rounded-2xl p-5 border border-amber-100 flex items-start gap-4">
+                <i class="fa-solid fa-circle-info text-amber-500 mt-1"></i>
+                <div>
+                    <h5 class="font-bold text-amber-900 text-sm">小提醒</h5>
+                    <p class="text-amber-800 text-sm mt-1">${data.tips}</p>
+                </div>
+            </div>
+        `;
+        }
+
+        function renderMemo() {
+            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+            document.getElementById('memo-tab').classList.add('active');
+
+            document.getElementById('display-area').innerHTML = `
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6">旅行備忘錄</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <a href="https://maps.app.goo.gl/my8S5DesTozFXvyw9" target="_blank" class="bg-white p-6 rounded-3xl border shadow-sm hover:shadow-xl transition-all block">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="bg-green-100 text-green-600 w-12 h-12 rounded-xl flex items-center justify-center"><i class="fa-solid fa-map-location-dot text-xl"></i></div>
+                            <h3 class="font-bold text-xl">Filip list iceland</h3>
+                        </div>
+                        <p class="text-sm text-gray-500">Filip 整理的精選地圖清單連結。</p>
+                    </a>
+                    <a href="https://docs.google.com/spreadsheets/d/1liedduLDOMIvWwi6kxFQfzxHOuxmBHvR96qKs0vsmRw/edit?gid=197291819#gid=197291819" target="_blank" class="bg-white p-6 rounded-3xl border shadow-sm hover:shadow-xl transition-all block">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="bg-blue-100 text-blue-600 w-12 h-12 rounded-xl flex items-center justify-center"><i class="fa-solid fa-table text-xl"></i></div>
+                            <h3 class="font-bold text-xl text-slate-800">冰島環島景點表格</h3>
+                        </div>
+                        <p class="text-sm text-gray-500">詳細的 Google Sheets 行程與數據備份。</p>
+                    </a>
+                </div>
+                <div class="mt-10 bg-white p-8 rounded-3xl border border-dashed border-gray-300">
+                    <h4 class="font-bold text-slate-800 mb-4">💡 行前必備工具</h4>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li>📍 離線地圖：Google Maps 或 Maps.me 已下載</li>
+                        <li>📅 預約確認：冰川健行、租車確認信件</li>
+                        <li>📱 必要 APP：Vedur (天氣)、SafeTravel (路況)</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+        }
+
+        renderDay(1);
+    </script>
+
+</body>
+
+</html>
