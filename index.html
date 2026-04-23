@@ -28,6 +28,11 @@
             background: #cbd5e1;
             border-radius: 10px;
         }
+
+        .flight-info {
+            width: 50%;
+            height: auto;
+        }
     </style>
 </head>
 
@@ -70,13 +75,14 @@
     <script>
         const itinerary = [
             {
-                day: 1, date: "8/26", title: "集合與首日整裝", summary: "A&B 早上抵達取車；你在傍晚匯合後前往營地。",
+                day: 1, date: "8/26", title: "集合與首日整裝", summary: "A&B 早上抵達取車；你在傍晚匯合後前往營地。", googleMapsRoute: "https://maps.app.goo.gl/nrTZgpbnxaABrKXN9",
+
                 spots: [
                     { name: "KEF 機場 / 取車", desc: "A&B 領取 Toyota Rav4，確認車頂帳裝備。", ticket: "免費", time: "1.5hr", map: "https://maps.app.goo.gl/spVFfoHUuxmas3TEA" },
                     { name: "Bónus 超市", desc: "第一輪大採購：瓦斯罐、水、一週食材。", ticket: "自費", time: "1hr", map: "https://maps.app.goo.gl/vFzcqSnRvoKn5xQZ8" },
                     { name: "雷克雅維克市區", desc: "在市區散步享用晚餐。", ticket: "免費", time: "2hr", map: "https://maps.app.goo.gl/4X9X9X9X9X9" }
                 ],
-                camp: { name: "Reykjavik Eco Campsite", map: "https://maps.app.goo.gl/1EsLGAqreioF5uXR8" },
+                camp: { name: "Reykjavik Eco Campsite", map: "https://maps.app.goo.gl/oH3B13ii6fUBiM9z8" },
                 tips: "你 17:20 抵達，朋友們接機後直接進市區，輕鬆開始旅程。"
             },
             {
@@ -172,9 +178,9 @@
             {
                 day: 11, date: "9/05", title: "回程與總結", summary: "帶著滿滿回憶告別冰島。",
                 spots: [
-                    { name: "KEF 機場", desc: "10:40 你搭機離境。", ticket: "退稅", time: "2hr", map: "https://maps.app.goo.gl/Airport" }
+                    { name: "KEF 機場", desc: "10:40 Joy 回台灣。", ticket: "-", time: "-", map: "https://maps.app.goo.gl/Airport" }
                 ],
-                camp: { name: "行程圓滿結束", map: "" },
+                camp: { name: "待查", map: "" },
                 tips: "提早兩小時到機場，預留退稅時間。"
             }
         ];
@@ -209,6 +215,12 @@
                         <p class="mt-1 text-slate-300 italic text-sm">${data.summary}</p>
                     </div>
                 </div>
+                <a href="${data.googleMapsRoute || '#'}" target="_blank" class="inline-flex items-center gap-2 px-5 py-2 mt-6 ml-4 border border-blue-200 rounded-full text-blue-700 bg-blue-50 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all text-sm font-medium shadow-sm">
+    <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+    <span>查看 Google Maps 路線</span>
+</a>    
+<br>
+<span class="text-xs text-gray-400 px-5">地圖連結還沒串好</span>
                 <div class="p-6 overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
@@ -271,6 +283,15 @@
                         <li>📍 離線地圖：Google Maps 或 Maps.me 已下載</li>
                         <li>📅 預約確認：冰川健行、租車確認信件</li>
                         <li>📱 必要 APP：Vedur (天氣)、SafeTravel (路況)</li>
+                    </ul>
+                </div>
+                <div class="mt-10 bg-white p-8 rounded-3xl border border-dashed border-gray-300">
+                    <h4 class="font-bold text-slate-800 mb-4">✈️ 我們抵達/離開冰島的航班資訊</h4>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li>Joy 的航班</li>
+                        <img class="flight-info" src="joy's flight 2.jpg">
+                        <li>Una & Ash 的航班</li>
+                        <img class="flight-info" src="Una & Ash.jpg">
                     </ul>
                 </div>
             </div>
